@@ -10,7 +10,7 @@ app.use(session({
 }));
 app.use('/api/auth', require('./routes/auth.js'));
 app.use('/api/hubs', require('./routes/hubs.js'));
-app.use(function (err, req, res) {
+app.use(function (err, req, res, next) {
     console.error(err);
     res.status(500).send(err.message);
 });

@@ -8,16 +8,12 @@ if (!FORGE_CLIENT_ID || !FORGE_CLIENT_SECRET || !FORGE_CALLBACK_URL) {
 const INTERNAL_TOKEN_SCOPES = ['data:read'];
 const PUBLIC_TOKEN_SCOPES = ['viewables:read'];
 
-function getAuthorizationUrl() {
-    return 'https://developer.api.autodesk.com' +
-        '/authentication/v1/authorize?response_type=code' +
-        '&client_id=' + FORGE_CLIENT_ID +
-        '&redirect_uri=' + FORGE_CALLBACK_URL +
-        '&scope=' + INTERNAL_TOKEN_SCOPES.join(' ');
-}
-
 const internalAuthClient = new AuthClientThreeLegged(FORGE_CLIENT_ID, FORGE_CLIENT_SECRET, FORGE_CALLBACK_URL, INTERNAL_TOKEN_SCOPES);
 const publicAuthClient = new AuthClientThreeLegged(FORGE_CLIENT_ID, FORGE_CLIENT_SECRET, FORGE_CALLBACK_URL, PUBLIC_TOKEN_SCOPES);
+
+function getAuthorizationUrl() {
+    return internalAuthClient.generateAuthUrl();
+}
 
 async function authCallbackMiddleware(req, res, next) {
     const internalCredentials = await internalAuthClient.getToken(req.query.code);
