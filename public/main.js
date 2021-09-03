@@ -4,6 +4,9 @@ import { initTree } from './sidebar.js';
 const login = document.getElementById('login');
 try {
     const resp = await fetch('/api/auth/profile');
+    if (!resp.ok) {
+        throw new Error('User is not logged in');
+    }
     const profile = await resp.json();
     login.innerText = `Logout (${profile.name})`;
     login.onclick = () => window.location.replace('/api/auth/logout');
