@@ -52,10 +52,6 @@ body, html {
     margin: 0.5em;
 }
 
-.treeview-node .icon {
-    width: 16px;
-}
-
 @media (max-width: 768px) {
     #sidebar {
         width: 100%;
@@ -67,4 +63,30 @@ body, html {
         top: 25%;
         bottom: 0;
     }
+}
+
+.icon-hub:before {
+    background-image: url(https://raw.githubusercontent.com/primer/octicons/main/icons/apps-16.svg); /* or https://raw.githubusercontent.com/primer/octicons/main/icons/stack-16.svg */
+    background-size: cover;
+}
+
+.icon-project:before {
+    
+    background-image: url(https://raw.githubusercontent.com/primer/octicons/main/icons/project-16.svg); /* or https://raw.githubusercontent.com/primer/octicons/main/icons/organization-16.svg */
+    background-size: cover;
+}
+
+.icon-my-folder:before {
+    background-image: url(https://raw.githubusercontent.com/primer/octicons/main/icons/file-directory-16.svg);
+    background-size: cover;
+}
+
+.icon-item:before {
+    background-image: url(https://raw.githubusercontent.com/primer/octicons/main/icons/file-16.svg);
+    background-size: cover;
+}
+
+.icon-version:before {
+    background-image: url(https://raw.githubusercontent.com/primer/octicons/main/icons/clock-16.svg);
+    background-size: cover;
 }

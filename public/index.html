@@ -5,8 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.css">
-    <link rel="stylesheet" href="https://unpkg.com/simple-treeview/dist/treeview.vanilla.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link rel="stylesheet" href="https://unpkg.com/inspire-tree-dom@4.0.6/dist/inspire-tree-light.min.css">
     <link rel="stylesheet" href="/main.css">
     <title>Autodesk Forge: Hubs Browser</title>
 </head>
@@ -15,13 +14,16 @@
     <div id="header">
         <img class="logo" src="/logo.png" alt="Autodesk Forge">
         <span class="title">Hubs Browser</span>
-        <button id="login" style="display: none">Login</button>
+        <button id="login" style="visibility: hidden;">Login</button>
     </div>
     <div id="sidebar">
         <div id="tree"></div>
     </div>
     <div id="preview"></div>
     <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://unpkg.com/inspire-tree@4.3.1/dist/inspire-tree.js"></script>
+    <script src="https://unpkg.com/inspire-tree-dom@4.0.6/dist/inspire-tree-dom.min.js"></script>
     <script src="/main.js" type="module"></script>
 </body>
 

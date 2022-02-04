@@ -4,21 +4,18 @@ import { initTree } from './sidebar.js';
 const login = document.getElementById('login');
 try {
     const resp = await fetch('/api/auth/profile');
-    if (!resp.ok) {
-        throw new Error('User is not logged in');
+    if (resp.ok) {
+        const user = await resp.json();
+        login.innerText = `Logout (${user.name})`;
+        login.onclick = () => window.location.replace('/api/auth/logout');
+        const viewer = await initViewer(document.getElementById('preview'));
+        initTree('#tree', (id) => loadModel(viewer, window.btoa(id).replace(/=/g, '')));
+    } else {
+        login.innerText = 'Login';
+        login.onclick = () => window.location.replace('/api/auth/login');
     }
-    const profile = await resp.json();
-    login.innerText = `Logout (${profile.name})`;
-    login.onclick = () => window.location.replace('/api/auth/logout');
-    const viewer = await initViewer(document.getElementById('preview'));
-    initTree(document.getElementById('tree'), function (nodes) {
-        if (nodes.length === 1) {
-            const urn = btoa(nodes[0].id).replace(/=/g, '');
-            loadModel(viewer, urn);
-        }
-    });
+    login.style.visibility = 'visible';
 } catch (err) {
-    login.innerText = 'Login';
-    login.onclick = () => window.location.replace('/api/auth/login');
+    alert('Could not initialize the application. See console for more details.');
+    console.error(err);
 }
-login.style.display = 'inline';
