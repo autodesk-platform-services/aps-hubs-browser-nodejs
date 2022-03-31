@@ -1,5 +1,5 @@
 const express = require('express');
-const session = require('cookie-session')
+const session = require('cookie-session');
 const { PORT, SERVER_SESSION_SECRET } = require('./config.js');
 
 let app = express();
