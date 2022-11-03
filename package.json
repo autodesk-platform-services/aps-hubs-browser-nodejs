@@ -1,13 +1,12 @@
 {
-  "name": "forge-hubs-browser-nodejs",
+  "name": "aps-hubs-browser-nodejs",
   "version": "1.0.0",
-  "description": "Autodesk Forge sample app showing the basic viewing capabilities.",
+  "description": "Autodesk Platform Services application built by following the Hubs Browser tutorial from https://tutorials.autodesk.io.",
   "scripts": {
     "start": "node server.js"
   },
   "keywords": [
-    "autodesk",
-    "forge"
+    "autodesk-platform-services"
   ],
   "author": "Petr Broz <petr.broz@autodesk.com>",
   "license": "MIT",
