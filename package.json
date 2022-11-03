@@ -12,8 +12,8 @@
   "license": "MIT",
   "dependencies": {
     "cookie-session": "^1.4.0",
-    "express": "^4.17.1",
-    "forge-apis": "^0.8.6"
+    "express": "^4.18.2",
+    "forge-apis": "^0.9.4"
   },
   "devDependencies": {
     "@types/forge-viewer": "^7.48.0"

@@ -1,12 +1,11 @@
 const express = require('express');
-const { authRefreshMiddleware } = require('../services/aps/auth.js');
-const { getHubs, getProjects, getProjectContents, getItemVersions } = require('../services/aps/hubs.js');
+const { authRefreshMiddleware, getHubs, getProjects, getProjectContents, getItemVersions } = require('../services/aps.js');
 
 let router = express.Router();
 
-router.use(authRefreshMiddleware);
+router.use('/api/hubs', authRefreshMiddleware);
 
-router.get('/', async function (req, res, next) {
+router.get('/api/hubs', async function (req, res, next) {
     try {
         const hubs = await getHubs(req.internalOAuthToken);
         res.json(hubs);
@@ -15,7 +14,7 @@ router.get('/', async function (req, res, next) {
     }
 });
 
-router.get('/:hub_id/projects', async function (req, res, next) {
+router.get('/api/hubs/:hub_id/projects', async function (req, res, next) {
     try {
         const projects = await getProjects(req.params.hub_id, req.internalOAuthToken);
         res.json(projects);
@@ -24,7 +23,7 @@ router.get('/:hub_id/projects', async function (req, res, next) {
     }
 });
 
-router.get('/:hub_id/projects/:project_id/contents', async function (req, res, next) {
+router.get('/api/hubs/:hub_id/projects/:project_id/contents', async function (req, res, next) {
     try {
         const contents = await getProjectContents(req.params.hub_id, req.params.project_id, req.query.folder_id, req.internalOAuthToken);
         res.json(contents);
@@ -33,7 +32,7 @@ router.get('/:hub_id/projects/:project_id/contents', async function (req, res, n
     }
 });
 
-router.get('/:hub_id/projects/:project_id/contents/:item_id/versions', async function (req, res, next) {
+router.get('/api/hubs/:hub_id/projects/:project_id/contents/:item_id/versions', async function (req, res, next) {
     try {
         const versions = await getItemVersions(req.params.project_id, req.params.item_id, req.internalOAuthToken);
         res.json(versions);
