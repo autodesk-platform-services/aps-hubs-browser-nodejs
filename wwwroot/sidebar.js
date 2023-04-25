@@ -8,8 +8,8 @@ async function getJSON(url) {
     return resp.json();
 }
 
-function createTreeNode(id, text, icon, children = false) {
-    return { id, text, children, itree: { icon } };
+function createTreeNode(id, text, icon, children = false, selectable = false) {
+    return { id, text, children, itree: { icon, state: { selectable } } };
 }
 
 async function getHubs() {
@@ -35,12 +35,15 @@ async function getContents(hubId, projectId, folderId = null) {
 
 async function getVersions(hubId, projectId, itemId) {
     const versions = await getJSON(`/api/hubs/${hubId}/projects/${projectId}/contents/${itemId}/versions`);
-    return versions.map(version => createTreeNode(`version|${version.id}`, version.attributes.createTime, 'icon-version'));
+    return versions.map(version => createTreeNode(`version|${version.id}`, version.attributes.createTime, 'icon-version', false, true));
 }
 
-export function initTree(selector, onSelectionChanged) {
+export function initTree(selector, onNodeSelected, onNodeDeselected) {
     // See http://inspire-tree.com
     const tree = new InspireTree({
+        selection: {
+            multiple: true
+        },
         data: function (node) {
             if (!node || !node.id) {
                 return getHubs();
@@ -56,11 +59,16 @@ export function initTree(selector, onSelectionChanged) {
             }
         }
     });
-    tree.on('node.click', function (event, node) {
-        event.preventTreeDefault();
+    tree.on('node.selected', function (node) {
         const tokens = node.id.split('|');
         if (tokens[0] === 'version') {
-            onSelectionChanged(tokens[1]);
+            onNodeSelected(tokens[1]);
+        }
+    });
+    tree.on('node.deselected', function (node) {
+        const tokens = node.id.split('|');
+        if (tokens[0] === 'version') {
+            onNodeDeselected(tokens[1]);
         }
     });
     return new InspireTreeDOM(tree, { target: selector });

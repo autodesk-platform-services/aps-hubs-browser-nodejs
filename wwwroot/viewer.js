@@ -24,13 +24,25 @@ export function initViewer(container) {
     });
 }
 
-export function loadModel(viewer, urn) {
+export function loadModel(viewer, urn, options) {
     function onDocumentLoadSuccess(doc) {
-        viewer.loadDocumentNode(doc, doc.getRoot().getDefaultGeometry());
+        viewer.loadDocumentNode(doc, doc.getRoot().getDefaultGeometry(), options);
     }
     function onDocumentLoadFailure(code, message) {
         alert('Could not load model. See console for more details.');
         console.error(message);
     }
     Autodesk.Viewing.Document.load('urn:' + urn, onDocumentLoadSuccess, onDocumentLoadFailure);
+}
+
+export function unloadModel(viewer, urn) {
+    const models = viewer.getAllModels();
+    const model = models.find(m => m.getData().urn === urn);
+    if (model) {
+        viewer.unloadModel(model);
+    }
+}
+
+export function urnify(id) {
+    return window.btoa(id).replace(/=/g, '').replace('/', '_');
 }

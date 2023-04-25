@@ -1,4 +1,4 @@
-import { initViewer, loadModel } from './viewer.js';
+import { initViewer, loadModel, unloadModel, urnify } from './viewer.js';
 import { initTree } from './sidebar.js';
 
 const login = document.getElementById('login');
@@ -18,7 +18,11 @@ try {
             };
         }
         const viewer = await initViewer(document.getElementById('preview'));
-        initTree('#tree', (id) => loadModel(viewer, window.btoa(id).replace(/=/g, '')));
+        initTree(
+            '#tree',
+            (id) => loadModel(viewer, urnify(id), { keepCurrentModels: true }),
+            (id) => unloadModel(viewer, urnify(id))
+        );
     } else {
         login.innerText = 'Login';
         login.onclick = () => window.location.replace('/api/auth/login');
