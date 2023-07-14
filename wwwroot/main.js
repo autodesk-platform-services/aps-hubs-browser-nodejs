@@ -1,4 +1,4 @@
-import { initViewer, loadModel, loadTiles } from './viewer.js';
+import { initViewer, loadModel } from './viewer.js';
 import { initTree } from './sidebar.js';
 
 const login = document.getElementById('login');
@@ -18,13 +18,7 @@ try {
             };
         }
         const viewer = await initViewer(document.getElementById('preview'));
-        initTree('#tree', (id, ext) => {
-			const urn = window.btoa(id).replace(/=/g, '')
-			if (ext == "rcs") 
-				loadTiles(viewer, urn)
-			else
-				loadModel(viewer, urn)
-		});
+        initTree('#tree', (id) => loadModel(viewer, window.btoa(id).replace(/=/g, '')));
     } else {
         login.innerText = 'Login';
         login.onclick = () => window.location.replace('/api/auth/login');
