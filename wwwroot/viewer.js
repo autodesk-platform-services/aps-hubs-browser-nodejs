@@ -9,7 +9,7 @@ async function getAccessToken(callback) {
         callback(access_token, expires_in);
     } catch (err) {
         alert('Could not obtain access token. See the console for more details.');
-        console.error(err);        
+        console.error(err);
     }
 }
 
@@ -24,7 +24,7 @@ export function initViewer(container) {
     });
 }
 
-export function loadModel(viewer, urn) {
+export function loadModel(viewer, urn, scopeOptions) {
     function onDocumentLoadSuccess(doc) {
         viewer.loadDocumentNode(doc, doc.getRoot().getDefaultGeometry());
     }
@@ -32,5 +32,18 @@ export function loadModel(viewer, urn) {
         alert('Could not load model. See console for more details.');
         console.error(message);
     }
-    Autodesk.Viewing.Document.load('urn:' + urn, onDocumentLoadSuccess, onDocumentLoadFailure);
+    if (scopeOptions) {
+        Autodesk.Viewing.Document.load(
+            'urn:' + urn,
+            onDocumentLoadSuccess,
+            onDocumentLoadFailure,
+            {
+                'x-ads-acm-scopes': scopeOptions.scopes,
+                'x-ads-acm-namespace': scopeOptions.region.toLowerCase() == 'us' ? 'WIPDM' : 'WIPDMEMEAPROD',
+                'x-ads-acm-check-groups': true   
+            });
+    } else {
+        Autodesk.Viewing.Document.load('urn:' + urn, onDocumentLoadSuccess, onDocumentLoadFailure);
+    }
+
 }

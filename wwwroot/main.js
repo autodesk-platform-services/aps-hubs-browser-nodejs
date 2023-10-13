@@ -18,7 +18,7 @@ try {
             };
         }
         const viewer = await initViewer(document.getElementById('preview'));
-        initTree('#tree', (id) => loadModel(viewer, window.btoa(id).replace(/=/g, '')));
+        initTree('#tree', (id, scopeOptions) => loadModel(viewer, window.btoa(id).replace(/=/g, ''), scopeOptions));
     } else {
         login.innerText = 'Login';
         login.onclick = () => window.location.replace('/api/auth/login');

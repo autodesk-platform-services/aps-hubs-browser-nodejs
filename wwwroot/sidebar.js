@@ -8,18 +8,18 @@ async function getJSON(url) {
     return resp.json();
 }
 
-function createTreeNode(id, text, icon, children = false) {
-    return { id, text, children, itree: { icon } };
+function createTreeNode(id, text, icon, children = false, attributes) {
+    return { id, text, children, itree: { icon, ...attributes } };
 }
 
 async function getHubs() {
     const hubs = await getJSON('/api/hubs');
-    return hubs.map(hub => createTreeNode(`hub|${hub.id}`, hub.attributes.name, 'icon-hub', true));
+    return hubs.map(hub => createTreeNode(`hub|${hub.id}`, hub.attributes.name, 'icon-hub', true, { region: hub.attributes.region }));
 }
 
 async function getProjects(hubId) {
     const projects = await getJSON(`/api/hubs/${hubId}/projects`);
-    return projects.map(project => createTreeNode(`project|${hubId}|${project.id}`, project.attributes.name, 'icon-project', true));
+    return projects.map(project => createTreeNode(`project|${hubId}|${project.id}`, project.attributes.name, 'icon-project', true, { scopes: project.attributes.scopes }));
 }
 
 async function getContents(hubId, projectId, folderId = null) {
@@ -60,7 +60,16 @@ export function initTree(selector, onSelectionChanged) {
         event.preventTreeDefault();
         const tokens = node.id.split('|');
         if (tokens[0] === 'version') {
-            onSelectionChanged(tokens[1]);
+            const hubParent = node.itree.parent.getParents().find(p => p.itree.icon == 'icon-hub');
+            const projectParent = node.itree.parent.getParents().find(p => p.itree.icon == 'icon-project');
+            const region = hubParent?.itree.region;
+            const scopes = projectParent?.itree.scopes.join(',');
+
+            if (scopes && region) {
+                onSelectionChanged(tokens[1], { scopes, region });
+            } else {
+                onSelectionChanged(tokens[1]);
+            }
         }
     });
     return new InspireTreeDOM(tree, { target: selector });
