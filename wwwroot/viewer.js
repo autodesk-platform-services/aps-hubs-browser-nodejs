@@ -15,8 +15,11 @@ async function getAccessToken(callback) {
 
 export function initViewer(container) {
     return new Promise(function (resolve, reject) {
-        Autodesk.Viewing.Initializer({ getAccessToken }, async function () {
-            const viewer = new Autodesk.Viewing.GuiViewer3D(container);
+        Autodesk.Viewing.Initializer({ getAccessToken }, function () {
+            const config = {
+                extensions: ['Autodesk.DocumentBrowser']
+            };
+            const viewer = new Autodesk.Viewing.GuiViewer3D(container, config);
             viewer.start();
             viewer.setTheme('light-theme');
             resolve(viewer);
