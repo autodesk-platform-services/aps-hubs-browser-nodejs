@@ -22,6 +22,9 @@ or Autodesk Construction Cloud
 - Command-line terminal such as [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/overview)
 or [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) (should already be available on your system)
 
+> We recommend using [Visual Studio Code](https://code.visualstudio.com) which, among other benefits,
+> provides an [integrated terminal](https://code.visualstudio.com/docs/terminal/basics) as well.
+
 ### Setup & Run
 
 - Clone this repository: `git clone https://github.com/autodesk-platform-services/aps-hubs-browser-nodejs`
