@@ -13,17 +13,17 @@ function createTreeNode(id, text, icon, children = false) {
 }
 
 async function getHubs() {
-    const hubs = await getJSON('/api/hubs');
+    const hubs = await getJSON('/hubs');
     return hubs.map(hub => createTreeNode(`hub|${hub.id}`, hub.attributes.name, 'icon-hub', true));
 }
 
 async function getProjects(hubId) {
-    const projects = await getJSON(`/api/hubs/${hubId}/projects`);
+    const projects = await getJSON(`/hubs/${hubId}/projects`);
     return projects.map(project => createTreeNode(`project|${hubId}|${project.id}`, project.attributes.name, 'icon-project', true));
 }
 
 async function getContents(hubId, projectId, folderId = null) {
-    const contents = await getJSON(`/api/hubs/${hubId}/projects/${projectId}/contents` + (folderId ? `?folder_id=${folderId}` : ''));
+    const contents = await getJSON(`/hubs/${hubId}/projects/${projectId}/contents` + (folderId ? `?folder=${folderId}` : ''));
     return contents.map(item => {
         if (item.type === 'folders') {
             return createTreeNode(`folder|${hubId}|${projectId}|${item.id}`, item.attributes.displayName, 'icon-my-folder', true);
@@ -34,7 +34,7 @@ async function getContents(hubId, projectId, folderId = null) {
 }
 
 async function getVersions(hubId, projectId, itemId) {
-    const versions = await getJSON(`/api/hubs/${hubId}/projects/${projectId}/contents/${itemId}/versions`);
+    const versions = await getJSON(`/hubs/${hubId}/projects/${projectId}/contents/${itemId}/versions`);
     return versions.map(version => createTreeNode(`version|${version.id}`, version.attributes.createTime, 'icon-version'));
 }
 

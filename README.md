@@ -38,12 +38,12 @@ and `<secret-phrase>` with an arbitrary string:
 ```bash
 APS_CLIENT_ID="<client-id>"
 APS_CLIENT_SECRET="<client-secret>"
-APS_CALLBACK_URL="http://localhost:8080/api/auth/callback" # URL your users will be redirected to after logging in with their Autodesk account
+APS_CALLBACK_URL="http://localhost:8080/auth/callback" # URL your users will be redirected to after logging in with their Autodesk account
 SERVER_SESSION_SECRET="<secret-phrase>" # phrase used to encrypt/decrypt server session cookies
 ```
 
-> For applications deployed to a custom domain, the callback URL will be `http://<your-domain>/api/auth/callback`
-> or `https://<your-domain>/api/auth/callback`. Do not forget to update the callback URL for your application
+> For applications deployed to a custom domain, the callback URL will be `http://<your-domain>/auth/callback`
+> or `https://<your-domain>/auth/callback`. Do not forget to update the callback URL for your application
 > in https://forge.autodesk.com/myapps as well.
 
 - Run the application, either from your code editor, or by running `npm start` in terminal
