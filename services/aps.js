@@ -41,6 +41,7 @@ service.authCallbackMiddleware = async (req, res, next) => {
     );
   const publicCredentials = await authenticationClient.getRefreshTokenAsync(
     APS_CLIENT_ID,
+    APS_CLIENT_SECRET,
     internalCredentials.refresh_token,
     new Array(scopes.Scopes.Viewablesread)
   );
@@ -89,43 +90,43 @@ service.authRefreshMiddleware = async (req, res, next) => {
 };
 
 service.getUserProfile = async (token) => {
-  const resp = await authenticationClient.getUserinfoAsync(token);
+  const resp = await authenticationClient.getUserinfoAsync(token.access_token);
   return resp;
 };
 
 service.getHubs = async (token) => {
-  const resp = await dataManagementClient.GetHubsAsync(token);
-  return resp;
+  const resp = await dataManagementClient.GetHubsAsync(token.access_token);
+  return resp.data;
 };
 
 service.getProjects = async (hubId, token) => {
-  const resp = await dataManagementClient.GetHubProjectsAsync(token, hubId);
-  return resp;
+  const resp = await dataManagementClient.GetHubProjectsAsync(token.access_token, hubId);
+  return resp.data;
 };
 
 service.getProjectContents = async (hubId, projectId, folderId, token) => {
   if (!folderId) {
     const resp = await dataManagementClient.GetProjectTopFoldersAsync(
-      token,
+      token.access_token,
       hubId,
       projectId
     );
-    return resp;
+    return resp.data;
   } else {
     const resp = await dataManagementClient.GetFolderContentsAsync(
-      token,
+      token.access_token,
       projectId,
       folderId
     );
-    return resp;
+    return resp.data;
   }
 };
 
 service.getItemVersions = async (projectId, itemId, token) => {
   const resp = await dataManagementClient.GetItemVersionsAsync(
-    token,
+    token.access_token,
     projectId,
     itemId
   );
-  return resp;
+  return resp.data;
 };
