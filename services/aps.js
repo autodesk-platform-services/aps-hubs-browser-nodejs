@@ -1,16 +1,25 @@
-const APS = require('forge-apis');
-const { APS_CLIENT_ID, APS_CLIENT_SECRET, APS_CALLBACK_URL, INTERNAL_TOKEN_SCOPES, PUBLIC_TOKEN_SCOPES } = require('../config.js');
+const { SdkManagerBuilder } = require('@aps_sdk/autodesk-sdkmanager');
+const { AuthenticationClient, Scopes, ResponseType } = require('@aps_sdk/authentication');
+const { DataManagementClient } = require('@aps_sdk/data-management');
+const { APS_CLIENT_ID, APS_CLIENT_SECRET, APS_CALLBACK_URL } = require('../config.js');
 
-const internalAuthClient = new APS.AuthClientThreeLegged(APS_CLIENT_ID, APS_CLIENT_SECRET, APS_CALLBACK_URL, INTERNAL_TOKEN_SCOPES);
-const publicAuthClient = new APS.AuthClientThreeLegged(APS_CLIENT_ID, APS_CLIENT_SECRET, APS_CALLBACK_URL, PUBLIC_TOKEN_SCOPES);
+const sdk = SdkManagerBuilder.Create().build();
+const authenticationClient = new AuthenticationClient(sdk);
+const dataManagementClient = new DataManagementClient(sdk);
 
 const service = module.exports = {};
 
-service.getAuthorizationUrl = () => internalAuthClient.generateAuthUrl();
+service.getAuthorizationUrl = () => authenticationClient.authorize(APS_CLIENT_ID, ResponseType.Code, APS_CALLBACK_URL, [
+    Scopes.Dataread,
+    Scopes.Datacreate,
+    Scopes.Viewablesread
+]);
 
 service.authCallbackMiddleware = async (req, res, next) => {
-    const internalCredentials = await internalAuthClient.getToken(req.query.code);
-    const publicCredentials = await publicAuthClient.refreshToken(internalCredentials);
+    const internalCredentials = await authenticationClient.getThreeLeggedTokenAsync(APS_CLIENT_ID, APS_CLIENT_SECRET, req.query.code, APS_CALLBACK_URL);
+    const publicCredentials = await authenticationClient.getRefreshTokenAsync(APS_CLIENT_ID, APS_CLIENT_SECRET, internalCredentials.refresh_token, [
+        Scopes.Viewablesread
+    ]);
     req.session.public_token = publicCredentials.access_token;
     req.session.internal_token = internalCredentials.access_token;
     req.session.refresh_token = publicCredentials.refresh_token;
@@ -26,8 +35,13 @@ service.authRefreshMiddleware = async (req, res, next) => {
     }
 
     if (expires_at < Date.now()) {
-        const internalCredentials = await internalAuthClient.refreshToken({ refresh_token });
-        const publicCredentials = await publicAuthClient.refreshToken(internalCredentials);
+        const internalCredentials = await authenticationClient.getRefreshTokenAsync(APS_CLIENT_ID, APS_CLIENT_SECRET, refresh_token, [
+            Scopes.Dataread,
+            Scopes.Datacreate
+        ]);
+        const publicCredentials = await authenticationClient.getRefreshTokenAsync(APS_CLIENT_ID, internalCredentials.refresh_token, [
+            Scopes.Viewablesread
+        ]);
         req.session.public_token = publicCredentials.access_token;
         req.session.internal_token = internalCredentials.access_token;
         req.session.refresh_token = publicCredentials.refresh_token;
@@ -35,41 +49,41 @@ service.authRefreshMiddleware = async (req, res, next) => {
     }
     req.internalOAuthToken = {
         access_token: req.session.internal_token,
-        expires_in: Math.round((req.session.expires_at - Date.now()) / 1000)
+        expires_in: Math.round((req.session.expires_at - Date.now()) / 1000),
     };
     req.publicOAuthToken = {
         access_token: req.session.public_token,
-        expires_in: Math.round((req.session.expires_at - Date.now()) / 1000)
+        expires_in: Math.round((req.session.expires_at - Date.now()) / 1000),
     };
     next();
 };
 
 service.getUserProfile = async (token) => {
-    const resp = await new APS.UserProfileApi().getUserProfile(internalAuthClient, token);
-    return resp.body;
+    const resp = await authenticationClient.getUserinfoAsync(token.access_token);
+    return resp;
 };
 
 service.getHubs = async (token) => {
-    const resp = await new APS.HubsApi().getHubs(null, internalAuthClient, token);
-    return resp.body.data;
+    const resp = await dataManagementClient.GetHubsAsync(token.access_token);
+    return resp.data;
 };
 
 service.getProjects = async (hubId, token) => {
-    const resp = await new APS.ProjectsApi().getHubProjects(hubId, null, internalAuthClient, token);
-    return resp.body.data;
+    const resp = await dataManagementClient.GetHubProjectsAsync(token.access_token, hubId);
+    return resp.data;
 };
 
 service.getProjectContents = async (hubId, projectId, folderId, token) => {
     if (!folderId) {
-        const resp = await new APS.ProjectsApi().getProjectTopFolders(hubId, projectId, internalAuthClient, token);
-        return resp.body.data;
+        const resp = await dataManagementClient.GetProjectTopFoldersAsync(token.access_token, hubId, projectId);
+        return resp.data;
     } else {
-        const resp = await new APS.FoldersApi().getFolderContents(projectId, folderId, null, internalAuthClient, token);
-        return resp.body.data;
+        const resp = await dataManagementClient.GetFolderContentsAsync(token.access_token, projectId, folderId);
+        return resp.data;
     }
 };
 
 service.getItemVersions = async (projectId, itemId, token) => {
-    const resp = await new APS.ItemsApi().getItemVersions(projectId, itemId, null, internalAuthClient, token);
-    return resp.body.data;
+    const resp = await dataManagementClient.GetItemVersionsAsync(token.access_token, projectId, itemId);
+    return resp.data;
 };
