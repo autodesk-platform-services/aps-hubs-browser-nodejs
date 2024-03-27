@@ -10,10 +10,12 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@aps_sdk/authentication": "file:aps_sdk-authentication-0.0.1-beta.1.tgz",
+    "@aps_sdk/autodesk-sdkmanager": "^0.0.7-beta.1",
+    "@aps_sdk/data-management": "file:aps_sdk-data-management-0.0.4-beta.1.tgz",
     "cookie-session": "^1.4.0",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "forge-apis": "^0.9.4"
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "@types/forge-viewer": "^7.48.0"
