@@ -20,13 +20,9 @@ router.get('/api/auth/token', authRefreshMiddleware, function (req, res) {
     res.json(req.publicOAuthToken);
 });
 
-router.get('/api/auth/profile', authRefreshMiddleware, async function (req, res, next) {
-    try {
-        const profile = await getUserProfile(req.internalOAuthToken.access_token);
-        res.json({ name: `${profile.name}` });
-    } catch (err) {
-        next(err);
-    }
+router.get('/api/auth/profile', authRefreshMiddleware, async function (req, res) {
+    const profile = await getUserProfile(req.internalOAuthToken.access_token);
+    res.json({ name: `${profile.name}` });
 });
 
 module.exports = router;

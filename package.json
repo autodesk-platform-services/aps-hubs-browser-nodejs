@@ -14,6 +14,6 @@
     "@aps_sdk/data-management": "1.0.0-beta.4",
     "cookie-session": "^1.4.0",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2"
+    "express": "^5.0.1"
   }
 }
