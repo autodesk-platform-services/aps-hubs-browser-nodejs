@@ -6,7 +6,7 @@ try {
     const resp = await fetch('/api/auth/profile');
     if (resp.ok) {
         const user = await resp.json();
-        login.innerText = `Logout (${user.name})`;
+        login.innerText = `Cerrar sesión (${user.name})`;
         login.onclick = () => {
             const iframe = document.createElement('iframe');
             iframe.style.visibility = 'hidden';

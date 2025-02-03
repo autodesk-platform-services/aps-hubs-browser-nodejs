@@ -38,7 +38,7 @@ and `<secret-phrase>` with an arbitrary string:
 ```bash
 APS_CLIENT_ID="<client-id>"
 APS_CLIENT_SECRET="<client-secret>"
-APS_CALLBACK_URL="http://localhost:8080/api/auth/callback" # URL your users will be redirected to after logging in with their Autodesk account
+APS_CALLBACK_URL="http://148.113.212.68:8080/api/auth/callback" # URL your users will be redirected to after logging in with their Autodesk account
 SERVER_SESSION_SECRET="<secret-phrase>" # phrase used to encrypt/decrypt server session cookies
 ```
 
@@ -47,7 +47,7 @@ SERVER_SESSION_SECRET="<secret-phrase>" # phrase used to encrypt/decrypt server 
 > in https://aps.autodesk.com/myapps as well.
 
 - Run the application, either from your code editor, or by running `npm start` in terminal
-- Open http://localhost:8080
+- Open http://148.113.212.68:8080
 
 > When using [Visual Studio Code](https://code.visualstudio.com), you can run & debug
 > the application by pressing `F5`.

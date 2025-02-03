@@ -4,19 +4,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="https://cdn.autodesk.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="./logo_gps.png">
     <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.css">
     <link rel="stylesheet" href="https://unpkg.com/inspire-tree-dom@4.0.6/dist/inspire-tree-light.min.css">
     <link rel="stylesheet" href="/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <title>Autodesk Platform Services: Hubs Browser</title>
+    <title>GPS GROUP | Visualizador</title>
 </head>
+<style>
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+</style>
 
 <body>
-    <div id="header">
-        <img class="logo" src="https://cdn.autodesk.io/logo/black/stacked.png" alt="Autodesk Platform Services">
-        <span class="title">Hubs Browser</span>
-        <button id="login" style="visibility: hidden;">Login</button>
+    <div id="header" class="border-1 border-bottom border-black">
+        <img class="logo" style="width: 52px; height: 52px;" src="./logo_gps.png" alt="GPS GROUP">
+        <span class="title fw-bold">Visualizador</span>
+        <button id="login" class="btn" style="visibility: hidden;">Iniciar sesión</button>
     </div>
     <div id="sidebar">
         <div id="tree"></div>
@@ -27,6 +35,9 @@
     <script src="https://unpkg.com/inspire-tree@4.3.1/dist/inspire-tree.js"></script>
     <script src="https://unpkg.com/inspire-tree-dom@4.0.6/dist/inspire-tree-dom.min.js"></script>
     <script src="/main.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
